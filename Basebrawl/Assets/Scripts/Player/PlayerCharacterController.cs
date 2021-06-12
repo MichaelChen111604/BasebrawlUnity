@@ -7,8 +7,10 @@ public class PlayerCharacterController : MonoBehaviour
     private CharacterController _controller;
     public Transform playerBody;
 
+    [Header("Movement")]
     public float mouseXSensitivity = 800f;
-    public float walkSpeed = 10f;
+    public float walkSpeed = 9.5f;
+    public float sprintSpeed = 13f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +19,7 @@ public class PlayerCharacterController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         _controller = GetComponent<CharacterController>();
+
     }
 
     // Update is called once per frame
@@ -27,11 +30,15 @@ public class PlayerCharacterController : MonoBehaviour
         // Rotate the entire player around the y-axis
         transform.Rotate(Vector3.up * mouseX);
 
-        // WASD walking
-        float walkX = Input.GetAxis("Horizontal") * walkSpeed * Time.deltaTime;
-        float walkZ = Input.GetAxis("Vertical") * walkSpeed * Time.deltaTime;
-        _controller.Move(transform.right * walkX + transform.forward * walkZ);
+        // WASD walking/sprinting
+        float moveX = Input.GetAxis("Horizontal") * Time.deltaTime;
+        float moveZ = Input.GetAxis("Vertical") * Time.deltaTime;
+        // Walking
+        if (!Input.GetButton("Sprint") || !Input.GetButton("VerticalButton"))
+            _controller.Move(walkSpeed * (transform.right * moveX + transform.forward * moveZ));
+        // Sprinting
+        else
+            _controller.Move(sprintSpeed * (transform.right * moveX + transform.forward * moveZ));
     }
-
 
 }
