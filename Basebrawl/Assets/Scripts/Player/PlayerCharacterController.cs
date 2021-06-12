@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerCharacterController : MonoBehaviour
 {
     private CharacterController _controller;
-    public Transform playerBody;
+    private GameObject playerBody;
     // 2 different camera locations
     public Transform fpCameraLocation, tpCameraLocation;
     public Camera _camera;
@@ -64,4 +64,8 @@ public class PlayerCharacterController : MonoBehaviour
         }
     }
 
+    // Called on collision
+    void OnCollisionEnter(Collision collision)
+    {
+    }
 }

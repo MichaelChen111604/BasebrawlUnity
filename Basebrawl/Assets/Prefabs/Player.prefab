@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4968450570295604853}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FirstPerson
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2833126755338617646}
   - component: {fileID: 312496400222352305}
   - component: {fileID: 3271035065566949374}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 3918149570287568841}
   - component: {fileID: 7503551167484226646}
   - component: {fileID: 3857806194789391996}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 7060611852096772559}
   - component: {fileID: 543978549244503427}
   - component: {fileID: 6426472166872210898}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec436d55d0feb14cb5fa39ac7215c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBody: {fileID: 1944474864414393274}
   fpCameraLocation: {fileID: 4968450570295604853}
   tpCameraLocation: {fileID: 1451096918107631767}
   _camera: {fileID: 7503551167484226646}
@@ -291,7 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1451096918107631767}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ThirdPerson
   m_TagString: Untagged
   m_Icon: {fileID: 0}
