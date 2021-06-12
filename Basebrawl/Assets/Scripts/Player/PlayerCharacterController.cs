@@ -6,6 +6,12 @@ public class PlayerCharacterController : MonoBehaviour
 {
     private CharacterController _controller;
     public Transform playerBody;
+    // 2 different camera locations
+    public Transform fpCameraLocation, tpCameraLocation;
+    public Camera _camera;
+
+    // 1 = swinging at balls, 2 = melee
+    public int SwingMode { get; private set; }
 
     [Header("Movement")]
     public float mouseXSensitivity = 800f;
@@ -19,6 +25,8 @@ public class PlayerCharacterController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         _controller = GetComponent<CharacterController>();
+
+        SwingMode = 1;
 
     }
 
@@ -39,6 +47,21 @@ public class PlayerCharacterController : MonoBehaviour
         // Sprinting
         else
             _controller.Move(sprintSpeed * (transform.right * moveX + transform.forward * moveZ));
+        
+        // Change bat mode
+        if (Input.GetButtonDown("Change bat mode"))
+        {
+            if (SwingMode == 1)
+            {
+                SwingMode = 2;
+                _camera.transform.position = tpCameraLocation.position;
+            }
+            else if (SwingMode == 2)
+            {
+                SwingMode = 1;
+                _camera.transform.position = fpCameraLocation.position;
+            }
+        }
     }
 
 }
