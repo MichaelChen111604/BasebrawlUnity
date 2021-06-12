@@ -1,2 +1,2 @@
 # Basebrawl Unity
-Baseball action game made in Unity
+Baseball-themed action game made in Unity
