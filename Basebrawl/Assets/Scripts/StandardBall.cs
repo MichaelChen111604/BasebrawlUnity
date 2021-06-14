@@ -20,7 +20,7 @@ public class StandardBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        transform.Rotate(Vector3.forward * 50);
     }
 
     // Called when ball collides with something
