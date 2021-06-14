@@ -12,8 +12,8 @@ public class GruntController : MonoBehaviour
     public GameObject Ball;
     // Point to spawn thrown balls from
     public Transform ReleasePoint;
-    // Speed at which balls are thrown, in mph
-    public float ThrowSpeed = 60;
+    // Horizontal speed at which balls are thrown, in mph
+    public float ThrowSpeed = 65;
     // Speed at which balls are thrown, in m/s (Unity units)
     private float throwSpeed;
     // Change in y-coordinate from release point to player's head
@@ -24,8 +24,8 @@ public class GruntController : MonoBehaviour
     {
         Health = BaseHealth;
         throwSpeed = ThrowSpeed * 0.44704f;
-        // IMPORTANT! Change 0.67 to FirstPerson y coordinate if first person camera is moved for player
-        throwDy = 0.67f - ReleasePoint.position.y;
+        throwDy = 1.35f - ReleasePoint.position.y;
+        Debug.Log(throwDy);
     }
 
     // Update is called once per frame
@@ -55,21 +55,29 @@ public class GruntController : MonoBehaviour
     void ThrowBall()
     {
         GameObject ball = Instantiate(Ball, ReleasePoint.position, Quaternion.Euler(0, 0, 0));
-        
-        // Calculate the correct starting rotation
-        Vector3 diffVector = GameObject.FindWithTag("Player").transform.position - gameObject.transform.position;
+        Vector3 playerPosition = GameObject.FindWithTag("Player").transform.position;
+
+        // Calculate the starting rotation
+        Vector3 diffVector = playerPosition - ReleasePoint.transform.position;
+        diffVector.y = throwDy;
         ball.transform.eulerAngles = transform.up * -Mathf.Atan(diffVector.z / diffVector.x) * 180 / Mathf.PI;
 
-        // Calculate the correct throwing angle, then set the ball's velocity up and lateral (towards the player)
-        // float dy =  / Physics.gravity.y;
-
+        // Calculate the vertical velocity
+        float g = Physics.gravity.y;
+        float deltaX = Mathf.Sqrt(diffVector.x * diffVector.x + diffVector.z * diffVector.z);
+        float deltaT = deltaX / throwSpeed;
+        float v0y = diffVector.y / deltaT - 0.5f * g * deltaT; // diffVector.y = delta y 
+        // Create a 2d vector of magnitude 1 to store horizontal direction information
+        Vector2 xz = new Vector2(diffVector.x, diffVector.z);
+        xz.Normalize();
+        // Throw the ball
+        ball.GetComponent<Rigidbody>().velocity = throwSpeed * (Vector3.right * xz.x + Vector3.forward * xz.y) + Vector3.up * v0y;
     }
 
     void RotateToPlayer()
     {
-        Vector3 playerLocation = GameObject.FindWithTag("Player").transform.position;
         // Vector to player
-        Vector3 diffVector = playerLocation - gameObject.transform.position;
+        Vector3 diffVector = GameObject.FindWithTag("Player").transform.position - ReleasePoint.transform.position;
         diffVector.y = 0;
         diffVector.Normalize();
         transform.eulerAngles = Quaternion.LookRotation(diffVector).eulerAngles + transform.up * 90;
