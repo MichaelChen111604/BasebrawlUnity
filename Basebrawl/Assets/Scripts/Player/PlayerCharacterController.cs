@@ -10,13 +10,17 @@ public class PlayerCharacterController : MonoBehaviour
     public Transform fpCameraLocation, tpCameraLocation;
     public Camera _camera;
 
+    // Used for calculating velocity
+    Vector3 PrevPos, NewPos;
+    public Vector3 velocity;
+
     // 1 = swinging at balls, 2 = melee
     public int SwingMode { get; private set; }
 
     [Header("Movement")]
     public float mouseXSensitivity = 800f;
-    public float walkSpeed = 9.5f;
-    public float sprintSpeed = 13f;
+    public float walkSpeed = 6.5f;
+    public float sprintSpeed = 9f;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +32,15 @@ public class PlayerCharacterController : MonoBehaviour
 
         SwingMode = 1;
 
+        PrevPos = NewPos = transform.position;
+
+    }
+
+    void FixedUpdate()
+    {
+        NewPos = transform.position;
+        velocity = (NewPos - PrevPos) / Time.fixedDeltaTime;
+        PrevPos = NewPos;
     }
 
     // Update is called once per frame

@@ -24,8 +24,7 @@ public class GruntController : MonoBehaviour
     {
         Health = BaseHealth;
         throwSpeed = ThrowSpeed * 0.44704f;
-        throwDy = 1.35f - ReleasePoint.position.y;
-        Debug.Log(throwDy);
+        throwDy = 1.1f - ReleasePoint.position.y;
     }
 
     // Update is called once per frame
@@ -55,22 +54,40 @@ public class GruntController : MonoBehaviour
     void ThrowBall()
     {
         GameObject ball = Instantiate(Ball, ReleasePoint.position, Quaternion.Euler(0, 0, 0));
-        Vector3 playerPosition = GameObject.FindWithTag("Player").transform.position;
+        Vector3 p = GameObject.FindWithTag("Player").transform.position;
+        Vector3 vp = GameObject.FindWithTag("Player").GetComponent<PlayerCharacterController>().velocity;
 
         // Calculate the starting rotation
-        Vector3 diffVector = playerPosition - ReleasePoint.transform.position;
-        diffVector.y = throwDy;
-        ball.transform.eulerAngles = transform.up * -Mathf.Atan(diffVector.z / diffVector.x) * 180 / Mathf.PI;
+        Vector3 pb = p - ReleasePoint.transform.position; // player-ball vector
+        pb.y = 0;
+        
+        ball.transform.eulerAngles = transform.up * -Mathf.Atan(pb.z / pb.x) * 180 / Mathf.PI;
 
-        // Calculate the vertical velocity
+        float dt = 1; // Airtime of ball before hitting player
+        if (vp.magnitude != 0) // Formulas are different depending on whether the player is moving
+        {
+            //// Calculate xz throw vector to hit moving target
+            // Cosine of angle between player trajectory and diffVector
+            float cosA = Mathf.Cos(Mathf.Atan(vp.x / vp.z) - Mathf.Atan(pb.x / pb.z));
+            // Quadratic formula
+            dt = (-2 * pb.magnitude * vp.magnitude * cosA
+                + Mathf.Sqrt(4 * pb.sqrMagnitude * vp.sqrMagnitude * cosA * cosA
+                + 4 * pb.sqrMagnitude * (throwSpeed * throwSpeed - vp.sqrMagnitude)))
+                / (2 * (throwSpeed * throwSpeed - vp.sqrMagnitude));
+        }
+        else
+        {
+            float dx = Mathf.Sqrt(pb.x * pb.x + pb.z * pb.z);
+            dt = dx / throwSpeed;
+        }
+        //// Calculate the vertical velocity
         float g = Physics.gravity.y;
-        float deltaX = Mathf.Sqrt(diffVector.x * diffVector.x + diffVector.z * diffVector.z);
-        float deltaT = deltaX / throwSpeed;
-        float v0y = diffVector.y / deltaT - 0.5f * g * deltaT; // diffVector.y = delta y 
-        // Create a 2d vector of magnitude 1 to store horizontal direction information
-        Vector2 xz = new Vector2(diffVector.x, diffVector.z);
+        pb.y = throwDy;
+        float v0y = pb.y / dt - 0.5f * g * dt; // diffVector.y = delta y 
+        //// Direction vector x/z for enemy to throw at
+        Vector2 xz = new Vector2(pb.x + vp.x * dt, pb.z + vp.z * dt);
         xz.Normalize();
-        // Throw the ball
+        //// Throw the ball
         ball.GetComponent<Rigidbody>().velocity = throwSpeed * (Vector3.right * xz.x + Vector3.forward * xz.y) + Vector3.up * v0y;
     }
 
