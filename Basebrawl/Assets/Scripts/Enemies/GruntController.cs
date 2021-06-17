@@ -98,6 +98,7 @@ public class GruntController : MonoBehaviour
         xz.Normalize();
         //// Throw the ball
         ball.GetComponent<Rigidbody>().velocity = throwSpeed * (Vector3.right * xz.x + Vector3.forward * xz.y) + Vector3.up * v0y;
+        ball.GetComponent<StandardBall>().thrownSpeed = ThrowSpeed;
     }
 
     void RotateToPlayer()

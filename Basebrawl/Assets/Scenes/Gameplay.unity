@@ -366,6 +366,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 543978549244503427, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
+      propertyPath: m_SkinWidth
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 543978549244503427, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
       propertyPath: m_SlopeLimit
       value: 0
       objectReference: {fileID: 0}

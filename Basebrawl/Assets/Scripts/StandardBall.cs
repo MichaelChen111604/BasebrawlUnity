@@ -8,6 +8,8 @@ public class StandardBall : MonoBehaviour
     protected GameObject[] BorderWalls;
     public Collider _collider;
     public Rigidbody _rigidbody;
+    // Used to determine how much damage should be caused by this ball - given in mph
+    public float thrownSpeed { get; set; } = 70f;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +17,7 @@ public class StandardBall : MonoBehaviour
         Player = GameObject.FindWithTag("Player");
         Ground = GameObject.FindWithTag("Ground");
         BorderWalls = GameObject.FindGameObjectsWithTag("Map Border");
+        gameObject.tag = "Ball";
     }
 
     // Update is called once per frame
@@ -26,11 +29,6 @@ public class StandardBall : MonoBehaviour
     // Called when ball collides with something
     private void OnCollisionEnter(Collision collision)
     {
-        // Called when the ball hits the ground
-        if (collision.gameObject.tag.Equals("Ground"))
-        {
-            // Prevent player from moving up after stepping on ball
-            Physics.IgnoreLayerCollision(3, 6);
-        }
+
     } 
 }

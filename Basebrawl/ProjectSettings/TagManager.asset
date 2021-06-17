@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Map Border
   - Ground
+  - Ball
   layers:
   - Default
   - TransparentFX

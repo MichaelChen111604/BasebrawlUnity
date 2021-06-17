@@ -14,6 +14,12 @@ public class PlayerCharacterController : MonoBehaviour
     Vector3 PrevPos, NewPos;
     public Vector3 velocity;
 
+    [Header("Health and Damage")]
+    public float StartingHealth = 100;
+    private float health; // Current health
+    [Tooltip("DamageMultipler * Ball velocity = damage taken")]
+    public float DamageMultiplier = 0.5f;
+
     // 1 = swinging at balls, 2 = melee
     public int SwingMode { get; private set; }
 
@@ -31,6 +37,7 @@ public class PlayerCharacterController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
 
         SwingMode = 1;
+        health = StartingHealth;
 
         PrevPos = NewPos = transform.position;
 
@@ -41,6 +48,8 @@ public class PlayerCharacterController : MonoBehaviour
         NewPos = transform.position;
         velocity = (NewPos - PrevPos) / Time.fixedDeltaTime;
         PrevPos = NewPos;
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1.0001f, gameObject.transform.position.z);
     }
 
     // Update is called once per frame
@@ -80,5 +89,24 @@ public class PlayerCharacterController : MonoBehaviour
     // Called on collision
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Had a collision");
+        // Called when the ball hits the ground
+        if (collision.gameObject.tag.Equals("Ball"))
+        {
+            // Take damage
+            TakeDamage(collision.gameObject.GetComponent<Rigidbody>());
+        }
+    }
+
+    // Called when hit by ball
+    void TakeDamage(Rigidbody ball)
+    {
+        float damage = DamageMultiplier * ball.GetComponent<StandardBall>().thrownSpeed;
+        health -= damage;
+        Debug.Log("Oof! Health = " + health);
+        if (health <= 0) // Player has died
+        {
+            Application.Quit();
+        }
     }
 }
