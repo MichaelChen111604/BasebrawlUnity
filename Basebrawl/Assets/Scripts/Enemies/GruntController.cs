@@ -10,14 +10,19 @@ public class GruntController : MonoBehaviour
     public float Health { get; private set; }
     // Ball object to be instantiated when thrown
     public GameObject Ball;
-    // Point to spawn thrown balls from
+    // Change in y-coordinate from release point to player's head
+    private float throwDy;
+    [Header("Throwing")]
+    [Tooltip("Time in seconds between throws")]
+    private float timeBetweenThrows = 3.5f;
+    [Tooltip("Point to spawn thrown balls from")]
     public Transform ReleasePoint;
-    // Horizontal speed at which balls are thrown, in mph
+    [Tooltip("Horizontal speed at which balls are thrown, in mph")]
     public float ThrowSpeed = 65;
     // Speed at which balls are thrown, in m/s (Unity units)
     private float throwSpeed;
-    // Change in y-coordinate from release point to player's head
-    private float throwDy;
+    // Time in seconds since last throw
+    private float timeSinceLastThrow = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -30,10 +35,14 @@ public class GruntController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Roll"))
+        // Throw a ball every timeBetweenThrows seconds
+        timeSinceLastThrow += Time.deltaTime;
+        if (timeSinceLastThrow >= timeBetweenThrows)
         {
             ThrowBall();
+            timeSinceLastThrow = 0f;
         }
+        // Stay facing the player
         RotateToPlayer();
     }
 
