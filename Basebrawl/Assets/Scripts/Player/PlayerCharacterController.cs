@@ -28,6 +28,19 @@ public class PlayerCharacterController : MonoBehaviour
     public float walkSpeed = 6.5f;
     public float sprintSpeed = 9f;
 
+    [Header("Bat")]
+    public Transform bat;
+    [Tooltip("Bat idle position")]
+    public Vector3 batIdlePosition;
+    [Tooltip("Bat idle rotation quaternion")]
+    public Quaternion batIdleQuat;
+    [Tooltip("Bat position when blocking")]
+    public Vector3 batBlockPosition;
+    [Tooltip("Bat rotation quaternion when blocking")]
+    public Quaternion batBlockQuat;
+    [Tooltip("Box collider used for blocking")]
+    public BoxCollider blockCollider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +53,13 @@ public class PlayerCharacterController : MonoBehaviour
         health = StartingHealth;
 
         PrevPos = NewPos = transform.position;
+        
+        batIdlePosition = new Vector3(0.512f, 0.049f, 0.946f);
+        batIdleQuat = new Quaternion(-0.7f, 0, 0, 0.709f);
+        batBlockQuat = new Quaternion(-0.63f, 0.32f, -0.32f, 0.63f);
+        batBlockPosition = new Vector3(-0.89f, 0.266f, 0.947f);
+        // Not blocking by default
+        ChangeBlocking(false);
 
     }
 
@@ -84,22 +104,42 @@ public class PlayerCharacterController : MonoBehaviour
                 _camera.transform.position = fpCameraLocation.position;
             }
         }
+
+        // Blocking
+        if (Input.GetButtonDown("Block"))
+        {
+            ChangeBlocking(true);
+        }
+        else if (Input.GetButtonUp("Block"))
+        {
+            ChangeBlocking(false);
+        }
+    }
+
+    // Called to start/stop blocking
+    void ChangeBlocking(bool blocking)
+    {
+        if (blocking)
+        {
+            bat.localPosition = batBlockPosition;
+            bat.localRotation = batBlockQuat;
+            blockCollider.isTrigger = false;
+        }
+        else
+        {
+            bat.localPosition = batIdlePosition;
+            bat.localRotation = batIdleQuat;
+            blockCollider.isTrigger = true;
+        }
     }
 
     // Called on collision
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Had a collision");
-        // Called when the ball hits the ground
-        if (collision.gameObject.tag.Equals("Ball"))
-        {
-            // Take damage
-            TakeDamage(collision.gameObject.GetComponent<Rigidbody>());
-        }
     }
 
     // Called when hit by ball
-    void TakeDamage(Rigidbody ball)
+    public void TakeDamage(Rigidbody ball)
     {
         float damage = DamageMultiplier * ball.GetComponent<StandardBall>().thrownSpeed;
         health -= damage;

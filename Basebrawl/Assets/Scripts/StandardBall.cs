@@ -29,6 +29,9 @@ public class StandardBall : MonoBehaviour
     // Called when ball collides with something
     private void OnCollisionEnter(Collision collision)
     {
-
+        if (collision.gameObject.tag.Equals("MapBorder") || collision.gameObject.tag.Equals("Ground")) 
+        {
+            Physics.IgnoreCollision(_collider, Player.GetComponentInChildren<CapsuleCollider>());
+        }
     } 
 }
