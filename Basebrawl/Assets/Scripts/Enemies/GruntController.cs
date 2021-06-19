@@ -64,7 +64,7 @@ public class GruntController : MonoBehaviour
     {
         GameObject ball = Instantiate(Ball, ReleasePoint.position, Quaternion.Euler(0, 0, 0));
         Vector3 p = GameObject.FindWithTag("Player").transform.position;
-        Vector3 vp = GameObject.FindWithTag("Player").GetComponent<PlayerCharacterController>().velocity;
+        Vector3 vp = GameObject.FindWithTag("Player").GetComponent<PlayerCharacterController>().movement.velocity;
 
         // Calculate the starting rotation
         Vector3 pb = p - ReleasePoint.transform.position; // player-ball vector

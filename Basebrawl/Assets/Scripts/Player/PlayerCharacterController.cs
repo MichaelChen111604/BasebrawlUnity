@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PlayerCharacterController : MonoBehaviour
 {
-    private CharacterController _controller;
-    private GameObject playerBody;
+    public PlayerMovement movement;
+
+    public CharacterController _controller;
     // 2 different camera locations
     public Transform fpCameraLocation, tpCameraLocation;
     public Camera _camera;
-
-    // Used for calculating velocity
-    Vector3 PrevPos, NewPos;
-    public Vector3 velocity;
 
     [Header("Health and Damage")]
     public float StartingHealth = 100;
@@ -20,13 +17,8 @@ public class PlayerCharacterController : MonoBehaviour
     [Tooltip("DamageMultipler * Ball velocity = damage taken")]
     public float DamageMultiplier = 0.5f;
 
-    // 1 = swinging at balls, 2 = melee
-    public int SwingMode { get; private set; }
-
-    [Header("Movement")]
-    public float mouseXSensitivity = 800f;
-    public float walkSpeed = 6.5f;
-    public float sprintSpeed = 9f;
+    // 1 = swing, 2 = melee
+    private int batMode;
 
     [Header("Bat")]
     public Transform bat;
@@ -49,10 +41,8 @@ public class PlayerCharacterController : MonoBehaviour
 
         _controller = GetComponent<CharacterController>();
 
-        SwingMode = 1;
+        batMode = 1;
         health = StartingHealth;
-
-        PrevPos = NewPos = transform.position;
         
         batIdlePosition = new Vector3(0.512f, 0.049f, 0.946f);
         batIdleQuat = new Quaternion(-0.7f, 0, 0, 0.709f);
@@ -63,46 +53,14 @@ public class PlayerCharacterController : MonoBehaviour
 
     }
 
-    void FixedUpdate()
-    {
-        NewPos = transform.position;
-        velocity = (NewPos - PrevPos) / Time.fixedDeltaTime;
-        PrevPos = NewPos;
-
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1.0001f, gameObject.transform.position.z);
-    }
-
     // Update is called once per frame
     void Update()
     {
-        // Horizontal mouse look
-        float mouseX = Input.GetAxis("Mouse X") * mouseXSensitivity * Time.deltaTime;
-        // Rotate the entire player around the y-axis
-        transform.Rotate(Vector3.up * mouseX);
 
-        // WASD walking/sprinting
-        float moveX = Input.GetAxis("Horizontal") * Time.deltaTime;
-        float moveZ = Input.GetAxis("Vertical") * Time.deltaTime;
-        // Walking
-        if (!Input.GetButton("Sprint") || !Input.GetButton("VerticalButton"))
-            _controller.Move(walkSpeed * (transform.right * moveX + transform.forward * moveZ));
-        // Sprinting
-        else
-            _controller.Move(sprintSpeed * (transform.right * moveX + transform.forward * moveZ));
-        
         // Change bat mode
         if (Input.GetButtonDown("Change bat mode"))
         {
-            if (SwingMode == 1)
-            {
-                SwingMode = 2;
-                _camera.transform.position = tpCameraLocation.position;
-            }
-            else if (SwingMode == 2)
-            {
-                SwingMode = 1;
-                _camera.transform.position = fpCameraLocation.position;
-            }
+            SetBatMode(batMode == 1 ? 2 : 1);
         }
 
         // Blocking
@@ -116,8 +74,23 @@ public class PlayerCharacterController : MonoBehaviour
         }
     }
 
+    // Called to change bat mode between swing and melee - 1 for swing, 2 for melee
+    private void SetBatMode(int mode) 
+    {
+        if (mode == 1)
+        {
+            batMode = 1;
+            _camera.transform.position = fpCameraLocation.position;
+        }
+        else
+        {
+            batMode = 2;
+            _camera.transform.position = tpCameraLocation.position;
+        }
+    }
+
     // Called to start/stop blocking
-    void ChangeBlocking(bool blocking)
+    private void ChangeBlocking(bool blocking)
     {
         if (blocking)
         {
