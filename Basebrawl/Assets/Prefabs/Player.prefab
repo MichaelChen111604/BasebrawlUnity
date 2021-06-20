@@ -563,11 +563,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec436d55d0feb14cb5fa39ac7215c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 0}
+  movement: {fileID: 6612083792874741875}
+  look: {fileID: 2772924381043703230}
+  _controller: {fileID: 543978549244503427}
   fpCameraLocation: {fileID: 4968450570295604853}
   tpCameraLocation: {fileID: 1451096918107631767}
   _camera: {fileID: 7503551167484226646}
-  velocity: {x: 0, y: 0, z: 0}
   StartingHealth: 100
   DamageMultiplier: 0.5
   bat: {fileID: 3063547282903123410}
@@ -604,6 +605,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseXSensitivity: 800
+  reticleYSensitivity: 1200
+  swingBallReticle: {fileID: 9004430733237839411}
+  swingTargetReticle: {fileID: 1563069963009791483}
+  swingBallReticleX: 0
+  swingBallReticleWidth: 80
+  swingBallReticleHeight: 80
 --- !u!1 &7654643489033678557
 GameObject:
   m_ObjectHideFlags: 0

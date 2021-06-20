@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCharacterController : MonoBehaviour
 {
     public PlayerMovement movement;
+    public PlayerLook look;
 
     public CharacterController _controller;
     // 2 different camera locations
@@ -19,6 +20,7 @@ public class PlayerCharacterController : MonoBehaviour
 
     // 1 = swing, 2 = melee
     private int batMode;
+    private bool blocking;
 
     [Header("Bat")]
     public Transform bat;
@@ -41,7 +43,7 @@ public class PlayerCharacterController : MonoBehaviour
 
         _controller = GetComponent<CharacterController>();
 
-        batMode = 1;
+        SetBatMode(1);
         health = StartingHealth;
         
         batIdlePosition = new Vector3(0.512f, 0.049f, 0.946f);
@@ -81,28 +83,44 @@ public class PlayerCharacterController : MonoBehaviour
         {
             batMode = 1;
             _camera.transform.position = fpCameraLocation.position;
+            if (!blocking)
+            {
+                look.swingBallReticle.enabled = true;
+                look.swingTargetReticle.enabled = true;
+            }
         }
         else
         {
             batMode = 2;
             _camera.transform.position = tpCameraLocation.position;
+            look.swingBallReticle.enabled = false;
+            look.swingTargetReticle.enabled = false;
         }
     }
 
     // Called to start/stop blocking
-    private void ChangeBlocking(bool blocking)
+    private void ChangeBlocking(bool _blocking)
     {
-        if (blocking)
+        if (_blocking)
         {
             bat.localPosition = batBlockPosition;
             bat.localRotation = batBlockQuat;
             blockCollider.isTrigger = false;
+            look.swingBallReticle.enabled = false;
+            look.swingTargetReticle.enabled = false;
+            blocking = true;
         }
         else
         {
             bat.localPosition = batIdlePosition;
             bat.localRotation = batIdleQuat;
             blockCollider.isTrigger = true;
+            if (batMode == 1)
+            {
+                look.swingBallReticle.enabled = true;
+                look.swingTargetReticle.enabled = true;
+            }
+            blocking = false;
         }
     }
 
