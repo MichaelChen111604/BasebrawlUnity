@@ -450,8 +450,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2772924381043703230, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
+      propertyPath: swingBallReticle
+      value: 
+      objectReference: {fileID: 1450965719}
+    - target: {fileID: 2772924381043703230, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
       propertyPath: mouseXSensitivity
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772924381043703230, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
+      propertyPath: reticleYSensitivity
+      value: 800
       objectReference: {fileID: 0}
     - target: {fileID: 3063547282903123410, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
       propertyPath: m_LocalScale.x
@@ -643,7 +651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8149074185294788201, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.176
+      value: 0.266
       objectReference: {fileID: 0}
     - target: {fileID: 9116418001554651391, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
       propertyPath: m_IsTrigger
@@ -871,6 +879,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3767943407939781211, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
   m_PrefabInstance: {fileID: 625289037}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1450965719 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9004430733237839411, guid: b1fdad88227e89a4eb1ac29a1708884f, type: 3}
+  m_PrefabInstance: {fileID: 625289037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1761847816
 GameObject:
   m_ObjectHideFlags: 0

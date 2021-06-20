@@ -36,5 +36,7 @@ public class PlayerMovement : MonoBehaviour
         // Sprinting
         else
             pcc._controller.Move(sprintSpeed * (transform.right * moveX + transform.forward * moveZ));
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1.0001f, gameObject.transform.position.z);
     }
 }
