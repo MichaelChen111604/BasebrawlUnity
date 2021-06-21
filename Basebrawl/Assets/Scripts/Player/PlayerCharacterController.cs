@@ -22,7 +22,7 @@ public class PlayerCharacterController : MonoBehaviour
     private int batMode;
     private bool blocking;
 
-    [Header("Bat")]
+    [Header("Batting")]
     public Transform bat;
     [Tooltip("Bat idle position")]
     public Vector3 batIdlePosition;
@@ -34,6 +34,8 @@ public class PlayerCharacterController : MonoBehaviour
     public Quaternion batBlockQuat;
     [Tooltip("Box collider used for blocking")]
     public BoxCollider blockCollider;
+    [Tooltip("Max distance at which balls can be hit")]
+    public float swingRange = 6;
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +60,6 @@ public class PlayerCharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         // Change bat mode
         if (Input.GetButtonDown("Change bat mode"))
         {

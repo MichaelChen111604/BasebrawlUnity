@@ -3,24 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Handles looking and aiming for the player
 public class PlayerLook : MonoBehaviour
 {
 
+    public PlayerCharacterController pcc;
+    
     public float mouseXSensitivity = 1000f;
-    public float reticleYSensitivity = 1200f;
+    public float reticleYSensitivity = 1.2f;
 
     public Image swingBallReticle, swingTargetReticle;
     [Header("Swing Reticle")]
     public float swingBallReticleX;
-    public float swingBallReticleWidth = 80;
-    public float swingBallReticleHeight = 80;
+    public float swingBallReticleRadius = 80;
     private float SwingBallReticleMaxY, SwingBallReticleMinY;
 
     // Start is called before the first frame update
     void Start()
     {
         swingBallReticle.rectTransform.anchoredPosition = new Vector2(50, -50);
-        swingBallReticle.rectTransform.sizeDelta = new Vector2(swingBallReticleHeight, swingBallReticleWidth);
+        swingBallReticle.rectTransform.sizeDelta = new Vector2(swingBallReticleRadius, swingBallReticleRadius);
         SwingBallReticleMaxY = 100;
         SwingBallReticleMinY = -100;
         
@@ -37,9 +39,12 @@ public class PlayerLook : MonoBehaviour
 
         // Move the reticle up and down
         float mouseY = Input.GetAxis("Mouse Y") * reticleYSensitivity * Time.deltaTime;
+        
+
         if (SwingBallReticleMinY < swingBallReticle.rectTransform.anchoredPosition.y + mouseY && swingBallReticle.rectTransform.anchoredPosition.y + mouseY < SwingBallReticleMaxY)
         {
             swingBallReticle.rectTransform.anchoredPosition += mouseY * Vector2.up;
         }
+
     }
 }
