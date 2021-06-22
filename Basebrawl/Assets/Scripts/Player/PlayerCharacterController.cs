@@ -35,7 +35,10 @@ public class PlayerCharacterController : MonoBehaviour
     [Tooltip("Box collider used for blocking")]
     public BoxCollider blockCollider;
     [Tooltip("Max distance at which balls can be hit")]
-    public float swingRange = 6;
+    public float swingRange = 6 ;
+    // Balls currently in recticle
+    [System.NonSerialized]
+    public ArrayList targetedBalls;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +58,8 @@ public class PlayerCharacterController : MonoBehaviour
         // Not blocking by default
         ChangeBlocking(false);
 
+        targetedBalls = new ArrayList();
+
     }
 
     // Update is called once per frame
@@ -65,7 +70,6 @@ public class PlayerCharacterController : MonoBehaviour
         {
             SetBatMode(batMode == 1 ? 2 : 1);
         }
-
         // Blocking
         if (Input.GetButtonDown("Block"))
         {
@@ -74,6 +78,12 @@ public class PlayerCharacterController : MonoBehaviour
         else if (Input.GetButtonUp("Block"))
         {
             ChangeBlocking(false);
+        }
+        // Swinging
+        if (Input.GetButtonDown("LeftClick") && batMode == 1)
+        {
+            SwingAtBall();
+            Debug.Log("Swung");
         }
     }
 
@@ -122,6 +132,29 @@ public class PlayerCharacterController : MonoBehaviour
                 look.swingTargetReticle.enabled = true;
             }
             blocking = false;
+        }
+    }
+
+    // Called to swing at ball
+    void SwingAtBall()
+    {
+        if (targetedBalls.Count == 0) return;
+        GameObject ball = (GameObject)targetedBalls[0];
+        if (ball)
+        {
+            Rigidbody ballrb = ball.GetComponentInChildren<Rigidbody>();
+            if (ballrb)
+                ballrb.velocity = new Vector3(-ballrb.velocity.x, ballrb.velocity.y, -ballrb.velocity.z);
+        }
+        for (int i = 1; i < targetedBalls.Count; i++)
+        {
+            GameObject b = (GameObject)targetedBalls[i];
+            if (b)
+            {
+                Rigidbody brb = ball.GetComponentInChildren<Rigidbody>();
+                if (brb)
+                    brb.velocity = new Vector3(-brb.velocity.x, brb.velocity.y, -brb.velocity.z);
+            }
         }
     }
 

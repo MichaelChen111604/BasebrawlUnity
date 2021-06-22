@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 833012428301364871}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: -1371327460968334512}
 --- !u!1001 &8408451774588829012
 PrefabInstance:
   m_ObjectHideFlags: 0

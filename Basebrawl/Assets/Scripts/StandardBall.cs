@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class StandardBall : MonoBehaviour
 {
     protected GameObject Player, Ground;
+    protected PlayerCharacterController playerScript;
     protected GameObject[] BorderWalls;
     protected Camera playerCamera;
     protected PlayerLook playerLook;
@@ -24,6 +25,7 @@ public class StandardBall : MonoBehaviour
         Ground = GameObject.FindWithTag("Ground");
         BorderWalls = GameObject.FindGameObjectsWithTag("Map Border");
         playerCamera = Player.GetComponentInChildren<Camera>();
+        playerScript = Player.GetComponent<PlayerCharacterController>();
         playerLook = Player.GetComponent<PlayerLook>();
         swingReticle = playerLook.swingBallReticle;
         gameObject.tag = "Ball";
@@ -41,16 +43,26 @@ public class StandardBall : MonoBehaviour
         cameraPosition.x -= 0.5f * Screen.width;
         cameraPosition.y -= 0.5f * Screen.height;
         // Check if it's inside the swing reticle
-        if (cameraPosition.z <= Player.GetComponent<PlayerCharacterController>().swingRange)
+        if (cameraPosition.z <= playerScript.swingRange)
         {
             Vector2 toCenter = new Vector2(cameraPosition.x - swingReticle.rectTransform.anchoredPosition.x, cameraPosition.y - swingReticle.rectTransform.anchoredPosition.y);
             if (toCenter.sqrMagnitude < 0.25 * playerLook.swingBallReticleRadius * playerLook.swingBallReticleRadius)
             {
                 swingReticle.color = Color.red;
+                if (!playerScript.targetedBalls.Contains(gameObject))
+                    playerScript.targetedBalls.Add(gameObject);
             }
-            else swingReticle.color = Color.white;
+            else
+            {
+                swingReticle.color = Color.white;
+                playerScript.targetedBalls.Remove(gameObject);
+            }
         }
-        else swingReticle.color = Color.white;
+        else
+        {
+            swingReticle.color = Color.white;
+            playerScript.targetedBalls.Remove(gameObject);
+        }
     }
 
     // Called when ball collides with something
