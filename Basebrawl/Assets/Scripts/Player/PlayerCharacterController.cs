@@ -83,7 +83,6 @@ public class PlayerCharacterController : MonoBehaviour
         if (Input.GetButtonDown("LeftClick") && batMode == 1)
         {
             SwingAtBall();
-            Debug.Log("Swung");
         }
     }
 
@@ -153,7 +152,8 @@ public class PlayerCharacterController : MonoBehaviour
             {
                 Rigidbody brb = ball.GetComponentInChildren<Rigidbody>();
                 if (brb)
-                    brb.velocity = new Vector3(-brb.velocity.x, brb.velocity.y, -brb.velocity.z);
+                    brb.velocity = new Vector3(0, 10, 0);
+                b.GetComponent<StandardBall>().IgnorePlayer();
             }
         }
     }

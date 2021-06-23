@@ -42,8 +42,8 @@ public class StandardBall : MonoBehaviour
         // Account for anchoring offset
         cameraPosition.x -= 0.5f * Screen.width;
         cameraPosition.y -= 0.5f * Screen.height;
-        // Check if it's inside the swing reticle
-        if (cameraPosition.z <= playerScript.swingRange)
+        // Check if it's inside the swing reticle and the player is facing the ball
+        if (cameraPosition.z <= playerScript.swingRange && cameraPosition.z > 0)
         {
             Vector2 toCenter = new Vector2(cameraPosition.x - swingReticle.rectTransform.anchoredPosition.x, cameraPosition.y - swingReticle.rectTransform.anchoredPosition.y);
             if (toCenter.sqrMagnitude < 0.25 * playerLook.swingBallReticleRadius * playerLook.swingBallReticleRadius)
@@ -54,14 +54,14 @@ public class StandardBall : MonoBehaviour
             }
             else
             {
-                swingReticle.color = Color.white;
                 playerScript.targetedBalls.Remove(gameObject);
+                if (playerScript.targetedBalls.Count == 0) swingReticle.color = Color.white;
             }
         }
         else
         {
-            swingReticle.color = Color.white;
             playerScript.targetedBalls.Remove(gameObject);
+            if (playerScript.targetedBalls.Count == 0) swingReticle.color = Color.white;
         }
     }
 
@@ -70,7 +70,13 @@ public class StandardBall : MonoBehaviour
     {
         if (collision.gameObject.tag.Equals("MapBorder") || collision.gameObject.tag.Equals("Ground")) 
         {
-            Physics.IgnoreCollision(_collider, Player.GetComponentInChildren<CapsuleCollider>());
+            IgnorePlayer();
         }
-    } 
+    }
+
+    // Ignore collisions with the player
+    public void IgnorePlayer()
+    {
+        Physics.IgnoreCollision(_collider, Player.GetComponentInChildren<CapsuleCollider>());
+    }
 }
